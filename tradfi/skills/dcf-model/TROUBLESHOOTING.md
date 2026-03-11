@@ -1,6 +1,6 @@
 # DCF Model Troubleshooting Guide
 
-**When to read this file:** If recalc.py shows errors OR valuation results seem unreasonable OR case selector not working properly.
+**When to read this file:** If validate_dcf.py shows errors OR valuation results seem unreasonable OR case selector not working properly.
 
 ## Model Returns Error Values
 
@@ -20,7 +20,7 @@
 ## Valuation Seems Unreasonable
 
 ### Implied price far too high
-- Check terminal value isn't >80% of EV
+- Check terminal value isn't >75% of EV
 - Verify terminal growth < WACC
 - Review if growth assumptions are realistic
 - Consider if margins are too optimistic

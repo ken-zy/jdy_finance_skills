@@ -8,9 +8,9 @@
 
 | 子插件 | 命令 | 数据源 |
 |--------|------|--------|
-| `tradfi` | `/comps` `/dcf` `/earnings` `/screen` `/thesis` `/model-update` `/debug-model` | Yahoo Finance, Alpha Vantage, FMP |
+| `tradfi` | `/comps` `/dcf` `/earnings` `/screen` `/thesis` `/model-update` `/debug-model` | Yahoo Finance, Alpha Vantage |
 | `crypto` | `/token` `/defi` `/airdrop` `/onchain` | CoinGecko, DefiLlama, Dune |
-| `macro` | `/macro` | FRED, DefiLlama, CoinGecko |
+| `macro` | `/dashboard` `/morning` `/catalyst` | FRED, DefiLlama, CoinGecko |
 | `portfolio` | `/rebalance` `/tlh` | Yahoo Finance |
 
 另有自动触发 skill（无独立命令）：`news-digest`（新闻补充）、`competitive-analysis`（竞争分析）、`audit-xls`（电子表格审计）、`idea-generation`（投资想法筛选）。
@@ -41,9 +41,9 @@ Layer 3: Chrome CDP 直接访问（Web Search 也不可用时）
 |------|--------------|---------------------|------------------|
 | 股票行情/财报 | yahoo-finance | finance.yahoo.com | 同左 |
 | 技术指标 | alpha-vantage | tradingview.com | TradingView 页面 |
-| SEC Filing | financial-modeling-prep | sec.gov/edgar | EDGAR 全文 |
+| SEC Filing | — | sec.gov/edgar | EDGAR 全文 |
 | 电话会议 | alpha-vantage | seekingalpha.com/transcripts | Seeking Alpha |
-| 分析师预期 | financial-modeling-prep | tipranks.com, wsj.com | TipRanks 页面 |
+| 分析师预期 | — | tipranks.com, wsj.com | TipRanks 页面 |
 | 加密行情 | coingecko | coingecko.com | 同左 |
 | DeFi 数据 | defillama | defillama.com | 同左 |
 | 链上数据 | dune | dune.com/queries | Dune 查询页面 |
@@ -83,6 +83,6 @@ Layer 3: Chrome CDP 直接访问（Web Search 也不可用时）
 | CoinGecko (Demo) | 30次/分, 10000次/月 | Crypto 首选数据源 |
 | DefiLlama | 无限制 | DeFi 首选数据源 |
 | Alpha Vantage | 25次/天, 5次/分 | 仅用于电话会议和技术指标 |
-| FMP | 250次/天 | 仅用于 SEC filing 和分析师数据 |
+| FMP | 250次/天 | 暂无 MCP server，通过 Web Search fallback |
 | FRED | 120次/分 | 宏观数据充裕 |
 | Dune | 15+40次/分 | 链上查询 |

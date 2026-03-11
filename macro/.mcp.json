@@ -12,7 +12,7 @@
       "args": ["@iqai/mcp-defillama"]
     },
     "coingecko": {
-      "type": "http",
+      "type": "stdio",
       "command": "npx",
       "args": ["@coingecko/coingecko-mcp"]
     }

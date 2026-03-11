@@ -53,9 +53,9 @@ These constraints apply throughout all DCF model building. Review before startin
 - THEN write formulas using the locked row positions
 - Test formulas immediately after creation
 
-**Formula Recalculation:**
-- Run `python recalc.py model.xlsx 30` before delivery
-- Fix ALL errors until status is "success"
+**Formula Validation:**
+- Run `python validate_dcf.py model.xlsx` before delivery
+- Fix ALL errors until status is "PASS"
 - Zero formula errors required (#REF!, #DIV/0!, #VALUE!, etc.)
 
 **Scenario Blocks:**
@@ -746,7 +746,7 @@ In addition, be aware of these errors:
 **This skill uses the `xlsx` skill for all spreadsheet operations.** The xlsx skill provides:
 - Standardized formula construction rules
 - Number formatting conventions
-- Automated formula recalculation via `recalc.py` script
+- Automated formula validation via `validate_dcf.py` script
 - Comprehensive error checking and validation
 
 All Excel files created by this skill must follow xlsx skill requirements, including zero formula errors and proper recalculation.
@@ -783,50 +783,38 @@ Create **two sheets**:
 
 **CRITICAL**: Sensitivity tables go at the BOTTOM of the DCF sheet (not on a separate sheet). This keeps all valuation outputs together.
 
-### Formula Recalculation (MANDATORY)
+### Formula Validation (MANDATORY)
 
-After creating or modifying the Excel model, **recalculate all formulas** using the recalc.py script from the xlsx skill:
+After creating or modifying the Excel model, **validate all formulas** using the validate_dcf.py script:
 
 ```bash
-python recalc.py [path_to_excel_file] [timeout_seconds]
+python validate_dcf.py [path_to_excel_file] [output.json]
 ```
 
 Example:
 ```bash
-python recalc.py AAPL_DCF_Model_2025-10-12.xlsx 30
+python validate_dcf.py AAPL_DCF_Model_2025-10-12.xlsx
 ```
 
 The script will:
-- Recalculate all formulas in all sheets using LibreOffice
+- Check required sheet structure (DCF, WACC)
 - Scan ALL cells for Excel errors (#REF!, #DIV/0!, #VALUE!, #NAME?, #NULL!, #NUM!, #N/A)
+- Validate DCF logic (terminal growth < WACC, WACC range, terminal value proportion)
 - Return detailed JSON with error locations and counts
 
 **Expected output format:**
 ```json
 {
-  "status": "success",           // or "errors_found"
-  "total_errors": 0,              // Total error count
-  "total_formulas": 42,           // Number of formulas in file
-  "error_summary": {}             // Only present if errors found
+  "status": "PASS",               // or "FAIL"
+  "error_count": 0,               // Total error count
+  "warning_count": 0,             // Total warning count
+  "errors": [],                   // Error details
+  "warnings": [],                 // Warning details
+  "info": []                      // Informational messages
 }
 ```
 
-**If errors are found**, the output will include details:
-```json
-{
-  "status": "errors_found",
-  "total_errors": 2,
-  "total_formulas": 42,
-  "error_summary": {
-    "#REF!": {
-      "count": 2,
-      "locations": ["DCF!B25", "DCF!C25"]
-    }
-  }
-}
-```
-
-**Fix all errors** and re-run recalc.py until status is "success" before delivering the model.
+**Fix all errors** and re-run validate_dcf.py until status is "PASS" before delivering the model.
 
 ### Formatting Standards
 
@@ -1210,13 +1198,13 @@ This approach centralizes scenario logic, making the model easier to audit and m
    - Cell comments on ALL hardcoded inputs
    - Professional borders around major sections
 
-2. **Recalculate formulas**: Run `python recalc.py model.xlsx 30`
+2. **Validate formulas**: Run `python validate_dcf.py model.xlsx`
 
 3. **Check output**:
-   - If `status` is `"success"` → Continue to step 4
-   - If `status` is `"errors_found"` → Check `error_summary` and read [TROUBLESHOOTING.md](./TROUBLESHOOTING.md) for debugging guidance
+   - If `status` is `"PASS"` → Continue to step 4
+   - If `status` is `"FAIL"` → Check `errors` and read [TROUBLESHOOTING.md](./TROUBLESHOOTING.md) for debugging guidance
 
-4. **Fix errors and re-run recalc.py** until status is "success"
+4. **Fix errors and re-run validate_dcf.py** until status is "PASS"
 
 5. **Spot-check formulas**:
    - Test one FCF formula - does it reference the correct assumption rows?
@@ -1237,7 +1225,7 @@ This approach centralizes scenario logic, making the model easier to audit and m
 Before delivering DCF model:
 
 **Required:**
-- Run `python recalc.py model.xlsx 30` until status is "success" (zero formula errors)
+- Run `python validate_dcf.py model.xlsx` until status is "PASS" (zero formula errors)
 - Two sheets: DCF (with sensitivity at bottom), WACC
 - Font colors: Blue=inputs, Black=formulas, Green=sheet links
 - Cell comments on ALL hardcoded inputs

@@ -1,7 +1,7 @@
 {
   "mcpServers": {
     "coingecko": {
-      "type": "http",
+      "type": "stdio",
       "command": "npx",
       "args": ["@coingecko/coingecko-mcp"]
     },

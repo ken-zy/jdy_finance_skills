@@ -9,11 +9,6 @@
       "type": "http",
       "url": "https://mcp.alphavantage.co",
       "env": { "ALPHA_VANTAGE_API_KEY": "${ALPHA_VANTAGE_API_KEY}" }
-    },
-    "financial-modeling-prep": {
-      "type": "http",
-      "url": "https://your-fmp-mcp-instance",
-      "env": { "FMP_API_KEY": "${FMP_API_KEY}" }
     }
   }
 }
