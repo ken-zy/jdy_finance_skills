@@ -3,7 +3,7 @@
 > 独立投资者金融分析插件 — 基于 Anthropic financial-services-plugins 架构，替换为免费数据源，新增 Crypto 模块
 >
 > 设计日期：2026-03-11
-> 状态：Phase 1-3 已完成，Phase 4-5 待实施
+> 状态：Phase 1-4 已完成，Phase 5 待实施
 > 架构变更：已从单插件改为多插件 marketplace（2026-03-11 决定）
 
 ---
@@ -93,15 +93,19 @@ indie-finance-plugin/
 │           ├── SKILL.md
 │           └── references/preset-queries.md
 │
-├── macro/                        # 子插件 3: 宏观经济 [Phase 4 待实施]
+├── macro/                        # 子插件 3: 宏观经济 [Phase 4 ✅]
 │   ├── .claude-plugin/plugin.json
 │   ├── .mcp.json                 # fred, defillama, coingecko
 │   ├── hooks/hooks.json
 │   ├── commands/
-│   │   └── macro.md              # /macro:macro
+│   │   ├── dashboard.md          # /macro:dashboard
+│   │   ├── morning.md            # /macro:morning
+│   │   └── catalyst.md           # /macro:catalyst
 │   └── skills/
 │       ├── macro-dashboard/SKILL.md
-│       └── news-digest/SKILL.md
+│       ├── morning-note/SKILL.md     # 适配自官方 equity-research
+│       ├── catalyst-calendar/SKILL.md # 适配自官方 equity-research
+│       └── news-digest/SKILL.md      # 自动触发，无独立命令
 │
 ├── portfolio/                    # 子插件 4: 组合管理 [Phase 5 待实施]
 │   ├── .claude-plugin/plugin.json
@@ -404,11 +408,13 @@ lbo-model, cim-builder, process-letter, strip-profile, pitch-deck, initiating-co
 | `/tradfi:thesis [ticker]` | tradfi | yahoo → fmp → alpha-vantage → web → chrome | Markdown | ✅ |
 | `/tradfi:model-update [ticker]` | tradfi | yahoo → fmp → alpha-vantage → web → chrome | Excel + Markdown | ✅ |
 | `/tradfi:debug-model [path]` | tradfi | 本地文件 | 审计报告 | ✅ |
-| `/crypto:token [symbol]` | crypto | coingecko → web → chrome | Markdown | 待实施 |
-| `/crypto:defi [protocol]` | crypto | defillama → coingecko → web → chrome | Markdown | 待实施 |
-| `/crypto:airdrop [project]` | crypto | coingecko → defillama → dune → web → chrome | Markdown (P-模板) | 待实施 |
-| `/crypto:onchain [query]` | crypto | dune → web → chrome | 对话内表格 | 待实施 |
-| `/macro:macro` | macro | fred → defillama → coingecko → web | Markdown | 待实施 |
+| `/crypto:token [symbol]` | crypto | coingecko → web → chrome | Markdown | ✅ |
+| `/crypto:defi [protocol]` | crypto | defillama → coingecko → web → chrome | Markdown | ✅ |
+| `/crypto:airdrop [project]` | crypto | coingecko → defillama → dune → web → chrome | Markdown (P-模板) | ✅ |
+| `/crypto:onchain [query]` | crypto | dune → web → chrome | 对话内表格 | ✅ |
+| `/macro:dashboard [scope]` | macro | fred → defillama → coingecko → web | Markdown | ✅ |
+| `/macro:morning [focus]` | macro | fred → coingecko → defillama → web | Markdown | ✅ |
+| `/macro:catalyst [tickers]` | macro | fred → coingecko → defillama → web | Markdown | ✅ |
 | `/portfolio:rebalance` | portfolio | yahoo-finance | Markdown + Excel | 待实施 |
 | `/portfolio:tlh` | portfolio | yahoo-finance | Markdown + Excel | 待实施 |
 
@@ -444,11 +450,12 @@ Phase 3: Crypto 模块 ✅
   ├── 编写 /crypto:token, /crypto:defi, /crypto:airdrop, /crypto:onchain 命令
   └── airdrop skill 对齐 P-xxx 模板格式（Sprint/中等维护/低保维护档位）
 
-Phase 4: Macro 模块（待实施）
-  ├── 新建 macro-dashboard skill
-  ├── 新建 news-digest skill（自动触发）
-  ├── 编写 /macro 命令
-  └── 端到端测试
+Phase 4: Macro 模块 ✅
+  ├── 新建 macro-dashboard skill（FRED 数据 + 加密宏观）
+  ├── 适配 morning-note skill（官方 → 加密扩展）
+  ├── 适配 catalyst-calendar skill（官方 → 加密事件扩展）
+  ├── 新建 news-digest skill（自动触发，无独立命令）
+  └── 编写 /macro:dashboard, /macro:morning, /macro:catalyst 命令
 
 Phase 5: Portfolio 模块（待实施）
   ├── Fork portfolio-rebalance skill（from wealth-management）
