@@ -8,26 +8,46 @@
 
 ### 1. 安装插件
 
+在 Claude Code 中执行：
+
 ```bash
-claude plugin add /path/to/indie-finance-plugin
+# 添加插件市场
+/plugin marketplace add JiaDingYi/indie_finance_plugin
+
+# 安装需要的子插件（按需选择）
+/plugin install tradfi      # 传统金融分析
+/plugin install crypto      # 加密市场分析
+/plugin install macro       # 宏观经济
+/plugin install portfolio   # 投资组合管理
 ```
 
-### 2. 配置 API Key（可选，增强功能）
+### 2. 配置 API Key
 
-MCP server 需要的 API Key（免费注册）：
+首次安装后启动新会话，插件会自动检测缺失的 API key 并引导你配置。
 
-| 服务 | 注册地址 | 用途 |
-|------|---------|------|
-| Alpha Vantage | alphavantage.co/support | 技术指标、电话会议（官方 MCP） |
-| Dune Analytics | dune.com/settings/api | 链上查询（官方 MCP） |
+你也可以随时手动配置：
 
-CoinGecko Demo 模式无需 Key。Yahoo Finance、DefiLlama、FRED 通过 Web Search 访问，无需 Key。
-
-设置方式：
 ```bash
-export ALPHA_VANTAGE_API_KEY="your-key"
-export DUNE_API_KEY="your-key"
+/tradfi:setup     # 配置 Alpha Vantage key
+/crypto:setup     # 配置 CoinGecko + Dune key
+/macro:setup      # 配置 CoinGecko key
 ```
+
+所需 API key（全部免费）：
+
+| 服务 | 注册地址 | 用途 | 子插件 |
+|------|---------|------|--------|
+| CoinGecko | [coingecko.com/en/api/pricing](https://www.coingecko.com/en/api/pricing) | 加密行情（官方 MCP） | crypto, macro |
+| Alpha Vantage | [alphavantage.co/support](https://www.alphavantage.co/support/#api-key) | 技术指标、电话会议（官方 MCP） | tradfi |
+| Dune Analytics | [dune.com/settings/api](https://dune.com/settings/api) | 链上查询（官方 MCP） | crypto |
+
+> Yahoo Finance、DefiLlama、FRED 通过 Web Search 访问，无需 key。
+
+### Key 管理机制
+
+- API key 保存在 `~/.indie-finance/keys.json`（与插件目录分离，权限 600）
+- 插件更新后 key 自动从备份恢复，无需重新配置
+- CoinGecko key 在 crypto 和 macro 之间自动同步
 
 ## 子插件
 
@@ -125,37 +145,34 @@ indie-finance-plugin/
 ├── tradfi/                            # 传统金融子插件
 │   ├── .claude-plugin/plugin.json
 │   ├── .mcp.json
-│   ├── commands/
+│   ├── commands/                      # setup, comps, dcf, earnings...
 │   ├── skills/
-│   └── hooks/hooks.json
+│   └── hooks/
+│       ├── hooks.json                 # SessionStart hook 配置
+│       └── check-keys.sh             # API key 检测与恢复
 ├── crypto/                            # 加密市场子插件
 │   ├── .claude-plugin/plugin.json
 │   ├── .mcp.json
-│   ├── commands/
+│   ├── commands/                      # setup, token, defi, airdrop...
 │   ├── skills/
-│   └── hooks/hooks.json
+│   └── hooks/
+│       ├── hooks.json
+│       └── check-keys.sh
 ├── macro/                             # 宏观经济子插件
 │   ├── .claude-plugin/plugin.json
 │   ├── .mcp.json
-│   ├── commands/
+│   ├── commands/                      # setup, dashboard, morning...
 │   ├── skills/
-│   └── hooks/hooks.json
-├── portfolio/                         # 投资组合管理子插件
+│   └── hooks/
+│       ├── hooks.json
+│       └── check-keys.sh
+├── portfolio/                         # 投资组合管理子插件（无 MCP 依赖）
 │   ├── .claude-plugin/plugin.json
-│   ├── .mcp.json
 │   ├── commands/
 │   ├── skills/
 │   └── hooks/hooks.json
 └── _reference/                        # 官方机构 skill（不激活，供参考）
 ```
-
-## 开发计划
-
-- **Phase 1**: 基础骨架 + 数据层配置 + MCP 连接验证
-- **Phase 2**: TradFi 模块（Fork 9 个官方 skill + 7 个命令 + 改写数据源）
-- **Phase 3**: Crypto 模块（新建 skill）— 可与 Phase 2 并行
-- **Phase 4**: 宏观模块 + 集成测试
-- **Phase 5**: Portfolio 模块（再平衡 + 税损收获）
 
 ## 致谢
 
