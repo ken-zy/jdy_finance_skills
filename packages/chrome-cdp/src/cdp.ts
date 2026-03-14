@@ -48,7 +48,11 @@ export class CdpConnection {
             else pending.resolve(msg.result);
           }
         }
-      } catch {}
+      } catch (err) {
+        // Log unexpected parse/processing errors to aid debugging.
+        // Pending requests will fall back to timeout, but logging preserves the original error.
+        console.error("[cdp] message handling error:", err);
+      }
     });
 
     this.ws.addEventListener("close", () => {

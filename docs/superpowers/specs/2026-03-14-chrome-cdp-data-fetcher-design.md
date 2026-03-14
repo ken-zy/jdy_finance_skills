@@ -77,6 +77,11 @@ Layer 1: chrome-cdp (effective primary data source)
 
 Layer 2 (WebSearch) and Layer 3 (Chrome CDP) merge because chrome-cdp already provides direct page access with full rendering.
 
+> **Note:** This change deviates from the current CLAUDE.md three-layer fallback strategy
+> (MCP → Web Search → Chrome CDP). Before implementing Phase 2 SKILL.md modifications,
+> the root CLAUDE.md must be updated to reflect the revised fallback architecture for
+> phantom-MCP scenarios.
+
 ## Package Design: `packages/chrome-cdp/`
 
 ### index.ts (~250 lines)

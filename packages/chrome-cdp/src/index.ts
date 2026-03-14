@@ -16,18 +16,25 @@ export type Session = {
 export async function createSession(): Promise<Session> {
   const port = await getFreePort();
   const chrome = await launchChrome(port);
-  const wsUrl = await waitForChromeReady(port);
 
-  // Retry CDP connection once per spec requirement
-  let cdp: CdpConnection;
   try {
-    cdp = await CdpConnection.connect(wsUrl);
-  } catch {
-    await new Promise((r) => setTimeout(r, 500));
-    cdp = await CdpConnection.connect(wsUrl);
-  }
+    const wsUrl = await waitForChromeReady(port);
 
-  return { cdp, chrome, port };
+    // Retry CDP connection once per spec requirement
+    let cdp: CdpConnection;
+    try {
+      cdp = await CdpConnection.connect(wsUrl);
+    } catch {
+      await new Promise((r) => setTimeout(r, 500));
+      cdp = await CdpConnection.connect(wsUrl);
+    }
+
+    return { cdp, chrome, port };
+  } catch (error) {
+    // Kill Chrome if post-launch setup fails to avoid orphaned processes
+    killChrome(chrome);
+    throw error;
+  }
 }
 
 /**

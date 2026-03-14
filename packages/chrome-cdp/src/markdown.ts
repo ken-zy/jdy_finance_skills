@@ -26,8 +26,8 @@ export async function extractMarkdown(
   ]);
 
   const virtualConsole = new VirtualConsole();
-  // Suppress CSS parsing errors from jsdom
-  virtualConsole.on("error", () => {});
+  // Suppress CSS parsing errors from jsdom (jsdom emits them via "jsdomError", not "error")
+  virtualConsole.on("jsdomError", () => {});
 
   const dom = new JSDOM(html, { url, virtualConsole });
   const result = await Defuddle(dom, url, { markdown: true });
