@@ -22,7 +22,6 @@ Sync all affected files to match the new layer ordering established in CLAUDE.md
 - `tradfi/skills/model-update/SKILL.md`
 - `tradfi/skills/competitive-analysis/SKILL.md`
 - `tradfi/skills/idea-generation/SKILL.md`
-- `tradfi/_reference/datapack-builder/SKILL.md`
 - `tradfi/skills/thesis-tracker/SKILL.md` (also fix plain-text "MCP → Web Search → Chrome CDP")
 - `tradfi/commands/comps.md`
 - `tradfi/commands/dcf.md`
