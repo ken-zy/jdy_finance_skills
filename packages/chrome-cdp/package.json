@@ -1,0 +1,20 @@
+{
+  "name": "chrome-cdp",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "test": "bun test",
+    "fetch": "bun src/index.ts"
+  },
+  "dependencies": {
+    "defuddle": "0.10.0",
+    "jsdom": "26.1.0"
+  },
+  "devDependencies": {
+    "@types/bun": "1.3.10"
+  }
+}
