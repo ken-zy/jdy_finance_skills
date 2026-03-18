@@ -1,13 +1,3 @@
 {
-  "mcpServers": {
-    "coingecko": {
-      "type": "stdio",
-      "command": "npx",
-      "args": ["@coingecko/coingecko-mcp"],
-      "env": {
-        "COINGECKO_DEMO_API_KEY": "",
-        "COINGECKO_ENVIRONMENT": "demo"
-      }
-    }
-  }
+  "mcpServers": {}
 }
