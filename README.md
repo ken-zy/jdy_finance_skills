@@ -11,7 +11,7 @@
 在终端中添加插件市场：
 
 ```bash
-claude plugin marketplace add Ken-zy/indie_finance_plugin
+claude plugin marketplace add ken-zy/indie_finance_plugin
 ```
 
 然后在 Claude Code 会话内安装子插件：
