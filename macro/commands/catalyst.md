@@ -1,6 +1,6 @@
 ---
 description: 催化剂日历 — 财报/经济数据/FOMC/代币解锁/空投快照/协议升级
-argument-hint: [tickers_or_tokens...] [horizon: 2w|month|quarter]
+argument-hint: "[tickers_or_tokens...] [horizon: 2w|month|quarter]"
 allowed-tools: mcp__coingecko__*, WebSearch, WebFetch
 ---
 

@@ -1,6 +1,6 @@
 ---
 description: Build a comparable company analysis with operating metrics, valuation multiples, and statistical benchmarking — outputs a professional .xlsx file
-argument-hint: <ticker_or_company> [peers...]
+argument-hint: "<ticker_or_company> [peers...]"
 allowed-tools: Bash(python3:*), Bash(pip:*), mcp__alpha-vantage__*, WebSearch, WebFetch
 ---
 

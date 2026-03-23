@@ -1,6 +1,6 @@
 ---
 description: 税务亏损收割 (TLH) — 识别未实现亏损/推荐替代标的/Wash Sale 检查/节税估算
-argument-hint: [portfolio_csv_with_cost_basis]
+argument-hint: "[portfolio_csv_with_cost_basis]"
 allowed-tools: Bash(python3:*), Bash(pip:*), WebSearch, WebFetch
 ---
 

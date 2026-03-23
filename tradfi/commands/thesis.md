@@ -1,6 +1,6 @@
 ---
 description: Create, update, or review an investment thesis — track pillars, catalysts, conviction, and data points over time
-argument-hint: <ticker_or_company> [update_context]
+argument-hint: "<ticker_or_company> [update_context]"
 allowed-tools: Bash(python3:*), mcp__alpha-vantage__*, WebSearch, WebFetch
 ---
 

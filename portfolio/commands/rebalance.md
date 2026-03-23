@@ -1,6 +1,6 @@
 ---
 description: 投资组合再平衡 — 偏离度分析/再平衡交易建议/税务感知/交易成本优化
-argument-hint: [portfolio_csv_or_description] [new_cash: amount]
+argument-hint: "[portfolio_csv_or_description] [new_cash: amount]"
 allowed-tools: Bash(python3:*), Bash(pip:*), WebSearch, WebFetch
 ---
 

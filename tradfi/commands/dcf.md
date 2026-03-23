@@ -1,6 +1,6 @@
 ---
 description: Build a discounted cash flow model with WACC, projections, sensitivity analysis — outputs a professional .xlsx file
-argument-hint: <ticker_or_company> [projection_years]
+argument-hint: "<ticker_or_company> [projection_years]"
 allowed-tools: Bash(python3:*), Bash(pip:*), mcp__alpha-vantage__*, WebSearch, WebFetch
 ---
 
