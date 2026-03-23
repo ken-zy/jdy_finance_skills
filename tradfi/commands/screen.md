@@ -1,6 +1,6 @@
 ---
 description: Run systematic stock screens to surface investment ideas — value, growth, quality, short, or thematic
-argument-hint: <screen_type> [sector] [criteria...]
+argument-hint: "<screen_type> [sector] [criteria...]"
 allowed-tools: Bash(python3:*), mcp__alpha-vantage__*, WebSearch, WebFetch
 ---
 

@@ -1,6 +1,6 @@
 ---
 description: 空投项目评估 — 六维度评分(0-5)/档位判定(Sprint/中等/低保)/P-xxx 格式输出
-argument-hint: <project_name>
+argument-hint: "<project_name>"
 allowed-tools: mcp__coingecko__*, WebSearch, WebFetch
 ---
 

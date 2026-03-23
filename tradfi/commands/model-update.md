@@ -1,6 +1,6 @@
 ---
 description: Update a financial model with new data — plug earnings, revise estimates, recalculate valuation after quarterly results or guidance changes
-argument-hint: <ticker_or_company> [trigger: earnings|guidance|macro|event]
+argument-hint: "<ticker_or_company> [trigger: earnings|guidance|macro|event]"
 allowed-tools: Bash(python3:*), Bash(pip:*), mcp__alpha-vantage__*, WebSearch, WebFetch
 ---
 

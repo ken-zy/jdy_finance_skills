@@ -1,6 +1,6 @@
 ---
 description: DeFi protocol analysis — TVL, multi-chain deployment, yield analysis, competitive comparison
-argument-hint: <protocol_name> [chain]
+argument-hint: "<protocol_name> [chain]"
 allowed-tools: mcp__coingecko__*, WebSearch, WebFetch
 ---
 

@@ -1,6 +1,6 @@
 ---
 description: Audit and debug a financial model — find formula errors, check BS balance, cash tie-out, and logic sanity
-argument-hint: <path_to_xlsx> [scope: selection|sheet|model]
+argument-hint: "<path_to_xlsx> [scope: selection|sheet|model]"
 allowed-tools: Bash(python3:*), Bash(pip:*), Bash(ls:*)
 ---
 

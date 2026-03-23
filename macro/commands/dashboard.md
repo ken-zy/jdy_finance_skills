@@ -1,6 +1,6 @@
 ---
 description: 宏观经济看板 — 利率/通胀/就业/市场情绪/加密宏观/经济日历
-argument-hint: [scope: rates|inflation|jobs|sentiment|crypto-macro|calendar|all]
+argument-hint: "[scope: rates|inflation|jobs|sentiment|crypto-macro|calendar|all]"
 allowed-tools: mcp__coingecko__*, WebSearch, WebFetch
 ---
 

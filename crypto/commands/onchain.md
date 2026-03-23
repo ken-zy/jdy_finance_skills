@@ -1,6 +1,6 @@
 ---
 description: On-chain data query — natural language to Dune SQL, preset queries, or direct query ID execution
-argument-hint: <natural_language_query> | query:<dune_query_id>
+argument-hint: "<natural_language_query> | query:<dune_query_id>"
 allowed-tools: mcp__dune__*, WebSearch, WebFetch
 ---
 

@@ -1,6 +1,6 @@
 ---
 description: Comprehensive token analysis — price, tokenomics, market structure, technicals, risk assessment
-argument-hint: <symbol_or_name> [chain]
+argument-hint: "<symbol_or_name> [chain]"
 allowed-tools: mcp__coingecko__*, WebSearch, WebFetch
 ---
 

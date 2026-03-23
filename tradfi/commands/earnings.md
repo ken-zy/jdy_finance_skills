@@ -1,6 +1,6 @@
 ---
 description: Create a professional earnings update report analyzing quarterly results — beat/miss, updated estimates, thesis impact
-argument-hint: <ticker_or_company> [quarter, e.g. Q3 2024]
+argument-hint: "<ticker_or_company> [quarter, e.g. Q3 2024]"
 allowed-tools: Bash(python3:*), Bash(pip:*), mcp__alpha-vantage__*, WebSearch, WebFetch
 ---
 

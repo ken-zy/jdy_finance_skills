@@ -1,6 +1,6 @@
 ---
 description: 每日晨会笔记 — 隔夜市场动态/关键事件/交易想法，覆盖传统金融和加密市场
-argument-hint: [focus: stocks|crypto|macro|all]
+argument-hint: "[focus: stocks|crypto|macro|all]"
 allowed-tools: mcp__coingecko__*, WebSearch, WebFetch
 ---
 
