@@ -79,7 +79,7 @@ Layer 3: Web Search 摘要兜底（Chrome CDP 失败时）
 ### 项目评估（/airdrop）
 - 输出 Markdown 文件
 - 格式对齐 `P-xxx` 项目评估模板
-- 包含六维度评分表 + 档位判定
+- 包含 v3 门槛+加权评分表 + 档位判定
 
 ### 链上查询（/onchain）
 - 对话内表格输出
