@@ -47,3 +47,4 @@ claude-responses/
 
 # Plugin local config
 *.local.md
+.mcp.json
