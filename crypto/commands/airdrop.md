@@ -1,12 +1,12 @@
 ---
-description: 空投项目评估 — 六维度评分(0-5)/档位判定(Sprint/中等/低保)/P-xxx 格式输出
+description: "空投项目评估 — v3 门槛+加权模型/档位判定(Sprint/中等/低保)/P-xxx 格式输出"
 argument-hint: "<project_name>"
-allowed-tools: mcp__coingecko__*, WebSearch, WebFetch
+allowed-tools: mcp__coingecko__*, mcp__dune__*, mcp__claude-in-chrome__*, WebSearch, WebFetch
 ---
 
 # Airdrop Evaluation
 
-对空投项目进行六维度评分和档位判定。
+对空投项目进行 v3 门槛+加权评分和档位判定。
 
 ## Context
 
@@ -17,60 +17,41 @@ allowed-tools: mcp__coingecko__*, WebSearch, WebFetch
 
 ### Layer 1: MCP
 - **coingecko** — 代币信息（如已发币）
+- **dune** — 链上数据（交易指标、用户增长、手续费、供需分析）
 
 ### Layer 2: Chrome CDP
 - `defillama.com/protocol/{protocol}` — TVL 趋势、协议数据
 - 官网、文档、Discord
 
 ### Layer 3: Web Search
-- 融资背景、团队、社区、积分机制、官方公告
+- 融资背景、团队、社区、积分机制、竞品、官方公告
 
 ## Workflow
 
-### Step 1: Identify Project
+### Step 1: Project Identification + Document Collection
 - 查找官网、文档、社交链接
 - 确认项目状态（是否已发币、积分系统）
+- 主动询问用户是否有项目文档（白皮书、tokenomics、积分规则）
 
 ### Step 2: Auto-Fetch Data
 - coingecko: 代币信息（如已发币）
-- defillama: TVL、链分布
-- Chrome CDP: 融资/团队/积分机制/社区规模（URL 未知时先 Web Search 取 URL 再访问）
+- dune: 链上交易指标、用户增长、手续费、供需分析
+- defillama: TVL 趋势（Chrome CDP）
+- Web Search: 融资/团队/积分机制/社区/竞品
 
-### Step 3: Pre-Fill Scoring
-基于数据为六维度预填评分建议（标注为建议，非最终）：
-- 发币意愿（总包潜力/分配机制/规则稳定性）
-- 筹码获取（与自身优势匹配）
-- 增长与可持续性
-- 单位成本（资金利用率）
-- 暴击几率（竞争拥挤度/女巫影响）
-- 风险等级（KYC/监管/作恶/女巫规则）
+### Step 3: Gate Check (门槛检查)
+预填发币意愿 + 风险等级评分（含置信度），用户确认：
+- 任一 < 3 → 输出"放弃"精简报告，流程终止
+- 两项都 ≥ 3 → 记录系数，进入加权评分
 
-### Step 4: User Confirms/Adjusts
-- 呈现预填结果，请用户确认或调整
-- 用户可补充自己的判断依据
+### Step 4: Weighted Scoring (加权评分)
+预填四维度（筹码获取/链上健康度/竞争定位/单位成本）+ 置信度，用户确认
 
-### Step 5: Generate Report
-按 P-xxx 模板输出：
-
-```
-> 评分口径：0–5 分（5=最好/最优），总分 30
-
-## 一、六维度评分（0–5）
-
-| 维度 | 分数 | 关键依据 | 主要扣分点/不确定性 |
-|------|------|---------|-----------------|
-| ... | **X** | ... | ... |
-
-**总分：X / 30**
-
-## 二、档位判定
-
-| 档位 | 规则门槛 | 是否满足 | 结论 |
-|------|---------|---------|-----|
-| 专项冲刺 | 总分≥25 且 筹码≥4 且 风险≥4 | | |
-| 中等维护 | 总分20-24 且 筹码≥3 且 风险≥4 | | |
-| 低保维护 | 总分15-19 且 筹码≥2 且 风险≥3 | | |
-```
+### Step 5: Calculate + Report
+- 加权分 → 百分制 → 最终分（× 发币系数 × 风险系数）
+- 档位判定（含降档规则）
+- 催化剂表格
+- 输出 P-xxx 报告
 
 ## Output
 
@@ -79,13 +60,14 @@ allowed-tools: mcp__coingecko__*, WebSearch, WebFetch
 
 ## Quality Checklist
 
-- [ ] 六维度全部评分（无空白）
-- [ ] 每项评分有关键依据
-- [ ] 每项有扣分点/不确定性
-- [ ] 档位判定正确应用 AND 逻辑
+- [ ] 门槛两维度全部评分
+- [ ] 门槛不通过 → 精简输出，流程终止
+- [ ] 门槛通过 → 四维度全部评分
+- [ ] 每项评分有依据 + 扣分点 + 置信度标注
+- [ ] 档位判定应用分数 + 筹码条件 + 降档规则
 - [ ] 数据来源标注
 - [ ] 预填评分标注为建议
 
 ## Skill Reference
 
-This command invokes the **airdrop-eval** skill. See `skills/airdrop-eval/SKILL.md` for the complete evaluation methodology and `skills/airdrop-eval/references/scoring-framework.md` for the six-dimension scoring rubric.
+This command invokes the **airdrop-eval** skill. See `skills/airdrop-eval/SKILL.md` for the complete v3 evaluation methodology and `skills/airdrop-eval/references/scoring-framework.md` for the gate+weighted scoring rubric.
