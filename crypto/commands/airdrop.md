@@ -1,7 +1,7 @@
 ---
 description: "空投项目评估 — v3 门槛+加权模型/档位判定(Sprint/中等/低保)/P-xxx 格式输出"
 argument-hint: "<project_name>"
-allowed-tools: mcp__coingecko__*, mcp__dune__*, mcp__claude-in-chrome__*, WebSearch, WebFetch
+allowed-tools: mcp__coingecko__*, mcp__dune__*, WebSearch, WebFetch
 ---
 
 # Airdrop Evaluation
