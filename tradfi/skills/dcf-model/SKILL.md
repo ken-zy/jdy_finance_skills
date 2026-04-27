@@ -5,6 +5,23 @@ description: Real DCF (Discounted Cash Flow) model creation for equity valuation
 
 # DCF Model Builder
 
+## jdy Data Source Fallback Policy
+
+When a skill needs external market/on-chain/macro data, use this order unless the user explicitly says otherwise:
+
+1. **MCP first** — use configured MCP tools when available and healthy.
+2. **OpenCLI second** — if MCP is unavailable, missing keys, rate-limited, or insufficient, use `opencli` before lower-level fallbacks.
+   - If browser access is needed, first launch jdy's fixed browser profile:
+     ```bash
+     /Users/jdy/document/web3/ChromeScript/chrome_multi_instance.sh --instance 0
+     ```
+   - Prefer site adapters when available, e.g. `opencli yahoo-finance`, `opencli xueqiu`, `opencli eastmoney`, `opencli web read`, or `opencli browser ...`.
+   - For public JSON endpoints, `opencli browser open <api-url>` + `opencli browser eval 'document.body.innerText'` is acceptable when it improves consistency with browser/session-based workflows.
+3. **Direct API / Chrome CDP / package fallback third** — use direct HTTP APIs, the bundled `packages/chrome-cdp`, or manual browser extraction only when OpenCLI has no adapter, cannot reach the page, or returns incomplete data.
+4. **Web Search last** — use search only as the final fallback or for qualitative context/news that requires multiple public sources.
+
+Always cite which layer produced each important datapoint. If layers disagree, say so and prefer the more primary/structured source.
+
 ## Overview
 
 This skill creates institutional-quality DCF models for equity valuation following investment banking standards. Each analysis produces a detailed Excel model (with sensitivity analysis included at the bottom of the DCF sheet).
@@ -75,11 +92,15 @@ Fetch data from MCP servers, user provided data, and the web.
 **Layer 1: MCP**
 - **alpha-vantage** — 技术指标（25次/天限额）
 
-**Layer 2: Chrome CDP**
+**Layer 2: OpenCLI**
+- When MCP is unavailable, use OpenCLI first; launch browser instance `0` when browser/session access is needed: `/Users/jdy/document/web3/ChromeScript/chrome_multi_instance.sh --instance 0`.
+- Prefer relevant OpenCLI adapters or `opencli web read` / `opencli browser ...`.
+
+**Layer 3: Chrome CDP**
 - `finance.yahoo.com/quote/{ticker}` — 历史财务数据、现价、股本、资产负债表
 - `sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK={ticker}` — 10-K/10-Q filing
 
-**Layer 3: Web Search**
+**Layer 4: Web Search**
 - finance.yahoo.com, macrotrends.net for historical data
 - SEC EDGAR for 10-K/10-Q filings
 
@@ -1171,13 +1192,13 @@ This approach centralizes scenario logic, making the model easier to audit and m
 1. **Gather market data**:
    - Use alpha-vantage MCP for technical indicators (Layer 1)
    - Use Chrome CDP (`finance.yahoo.com/quote/{ticker}`) for current stock prices, beta, shares outstanding (Layer 2)
-   - Fall back to web search if Chrome CDP also fails (Layer 3)
+   - Fall back to web search only if OpenCLI and Chrome CDP both fail (Layer 4)
    - Request from user if specific data is needed
 
 2. **Gather historical financials**:
    - Use Chrome CDP (`finance.yahoo.com/quote/{ticker}`) for structured financial data (Layer 2)
    - Use Chrome CDP (`sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK={ticker}`) for 10-K/10-Q filings
-   - Fall back to web search if Chrome CDP fails (Layer 3)
+   - Fall back to web search only if OpenCLI and Chrome CDP both fail (Layer 4)
    - Request from user if not available via Chrome CDP or web
 
 3. **Begin model construction** using the DCF methodology detailed in this skill

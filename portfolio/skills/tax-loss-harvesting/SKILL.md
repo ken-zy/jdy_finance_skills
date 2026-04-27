@@ -9,6 +9,23 @@ description: |
 
 # Tax-Loss Harvesting
 
+## jdy Data Source Fallback Policy
+
+When a skill needs external market/on-chain/macro data, use this order unless the user explicitly says otherwise:
+
+1. **MCP first** — use configured MCP tools when available and healthy.
+2. **OpenCLI second** — if MCP is unavailable, missing keys, rate-limited, or insufficient, use `opencli` before lower-level fallbacks.
+   - If browser access is needed, first launch jdy's fixed browser profile:
+     ```bash
+     /Users/jdy/document/web3/ChromeScript/chrome_multi_instance.sh --instance 0
+     ```
+   - Prefer site adapters when available, e.g. `opencli yahoo-finance`, `opencli xueqiu`, `opencli eastmoney`, `opencli web read`, or `opencli browser ...`.
+   - For public JSON endpoints, `opencli browser open <api-url>` + `opencli browser eval 'document.body.innerText'` is acceptable when it improves consistency with browser/session-based workflows.
+3. **Direct API / Chrome CDP / package fallback third** — use direct HTTP APIs, the bundled `packages/chrome-cdp`, or manual browser extraction only when OpenCLI has no adapter, cannot reach the page, or returns incomplete data.
+4. **Web Search last** — use search only as the final fallback or for qualitative context/news that requires multiple public sources.
+
+Always cite which layer produced each important datapoint. If layers disagree, say so and prefer the more primary/structured source.
+
 识别投资组合中的 TLH 机会，推荐替代标的，避免 Wash Sale。
 
 ## Data Source Priority
@@ -16,11 +33,16 @@ description: |
 ### Layer 1: MCP
 - （无）portfolio 子插件无已批准的 MCP server
 
-### Layer 2: Chrome CDP
+### Layer 2: OpenCLI
+- When MCP is unavailable, use OpenCLI before lower-level fallbacks.
+- Launch browser instance `0` first when browser/session access is needed: `/Users/jdy/document/web3/ChromeScript/chrome_multi_instance.sh --instance 0`.
+- Prefer relevant adapters (`opencli yahoo-finance`, `opencli xueqiu`, `opencli eastmoney`, `opencli web read`, `opencli browser ...`) when available.
+
+### Layer 3: Chrome CDP
 - `finance.yahoo.com/quote/{ticker}` — 实时价格/历史价格/ETF 信息/相关标的搜索
 - 券商税务报告页面（如需）
 
-### Layer 3: Web Search
+### Layer 4: Web Search
 - Wash Sale 规则最新解读、ETF 替代品对照表
 
 ## Workflow

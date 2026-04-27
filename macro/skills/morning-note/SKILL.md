@@ -9,6 +9,23 @@ description: |
 
 # Morning Note
 
+## jdy Data Source Fallback Policy
+
+When a skill needs external market/on-chain/macro data, use this order unless the user explicitly says otherwise:
+
+1. **MCP first** — use configured MCP tools when available and healthy.
+2. **OpenCLI second** — if MCP is unavailable, missing keys, rate-limited, or insufficient, use `opencli` before lower-level fallbacks.
+   - If browser access is needed, first launch jdy's fixed browser profile:
+     ```bash
+     /Users/jdy/document/web3/ChromeScript/chrome_multi_instance.sh --instance 0
+     ```
+   - Prefer site adapters when available, e.g. `opencli yahoo-finance`, `opencli xueqiu`, `opencli eastmoney`, `opencli web read`, or `opencli browser ...`.
+   - For public JSON endpoints, `opencli browser open <api-url>` + `opencli browser eval 'document.body.innerText'` is acceptable when it improves consistency with browser/session-based workflows.
+3. **Direct API / Chrome CDP / package fallback third** — use direct HTTP APIs, the bundled `packages/chrome-cdp`, or manual browser extraction only when OpenCLI has no adapter, cannot reach the page, or returns incomplete data.
+4. **Web Search last** — use search only as the final fallback or for qualitative context/news that requires multiple public sources.
+
+Always cite which layer produced each important datapoint. If layers disagree, say so and prefer the more primary/structured source.
+
 生成简洁的每日晨会笔记，覆盖隔夜市场动态、关键事件和交易想法。
 
 ## Data Source Priority
@@ -16,11 +33,16 @@ description: |
 ### Layer 1: MCP
 - **coingecko** — 加密市场隔夜表现、重大价格变动
 
-### Layer 2: Chrome CDP
+### Layer 2: OpenCLI
+- When MCP is unavailable, use OpenCLI before lower-level fallbacks.
+- Launch browser instance `0` first when browser/session access is needed: `/Users/jdy/document/web3/ChromeScript/chrome_multi_instance.sh --instance 0`.
+- Prefer relevant adapters (`opencli yahoo-finance`, `opencli xueqiu`, `opencli eastmoney`, `opencli web read`, `opencli browser ...`) when available.
+
+### Layer 3: Chrome CDP
 - `fred.stlouisfed.org/series/{series_id}` — 经济数据发布（利率变动、就业数据等）
 - `defillama.com/protocol/{protocol}` — DeFi TVL 变动、协议重大事件
 
-### Layer 3: Web Search
+### Layer 4: Web Search
 - 财经新闻（earnings, M&A, 政策变化）
 - 期货/盘前数据
 - 加密新闻（项目公告、监管动态）

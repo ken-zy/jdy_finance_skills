@@ -5,6 +5,23 @@ description: Create professional equity research earnings update reports (8-12 p
 
 # Equity Research Earnings Update
 
+## jdy Data Source Fallback Policy
+
+When a skill needs external market/on-chain/macro data, use this order unless the user explicitly says otherwise:
+
+1. **MCP first** — use configured MCP tools when available and healthy.
+2. **OpenCLI second** — if MCP is unavailable, missing keys, rate-limited, or insufficient, use `opencli` before lower-level fallbacks.
+   - If browser access is needed, first launch jdy's fixed browser profile:
+     ```bash
+     /Users/jdy/document/web3/ChromeScript/chrome_multi_instance.sh --instance 0
+     ```
+   - Prefer site adapters when available, e.g. `opencli yahoo-finance`, `opencli xueqiu`, `opencli eastmoney`, `opencli web read`, or `opencli browser ...`.
+   - For public JSON endpoints, `opencli browser open <api-url>` + `opencli browser eval 'document.body.innerText'` is acceptable when it improves consistency with browser/session-based workflows.
+3. **Direct API / Chrome CDP / package fallback third** — use direct HTTP APIs, the bundled `packages/chrome-cdp`, or manual browser extraction only when OpenCLI has no adapter, cannot reach the page, or returns incomplete data.
+4. **Web Search last** — use search only as the final fallback or for qualitative context/news that requires multiple public sources.
+
+Always cite which layer produced each important datapoint. If layers disagree, say so and prefer the more primary/structured source.
+
 Create professional **EARNINGS UPDATE REPORTS** analyzing quarterly results for companies already under coverage, following institutional standards (JPMorgan, Goldman Sachs, Morgan Stanley format).
 
 **Key Characteristics:**
@@ -34,11 +51,16 @@ Use when the user requests:
 ### Layer 1: MCP
 - **alpha-vantage** — 电话会议转录、财报日历（25次/天限额）
 
-### Layer 2: Chrome CDP
+### Layer 2: OpenCLI
+- When MCP is unavailable, use OpenCLI before lower-level fallbacks.
+- Launch browser instance `0` first when browser/session access is needed: `/Users/jdy/document/web3/ChromeScript/chrome_multi_instance.sh --instance 0`.
+- Prefer relevant adapters (`opencli yahoo-finance`, `opencli xueqiu`, `opencli eastmoney`, `opencli web read`, `opencli browser ...`) when available.
+
+### Layer 3: Chrome CDP
 - `finance.yahoo.com/quote/{ticker}` — 财报数据、分析师预期
 - `seekingalpha.com/symbol/{ticker}/earnings/transcripts` — 电话会议记录全文
 
-### Layer 3: Web Search
+### Layer 4: Web Search
 - seekingalpha.com/earnings/transcripts
 - finance.yahoo.com/earnings
 - sec.gov/cgi-bin/browse-edgar
@@ -143,7 +165,7 @@ The earnings update process follows 5 phases:
 1. Query **alpha-vantage** MCP for earnings call transcripts and earnings calendar (Layer 1)
 2. Use **Chrome CDP** (`finance.yahoo.com/quote/{ticker}`) for earnings results and financial statements (Layer 2)
 3. Use **Chrome CDP** (`seekingalpha.com/symbol/{ticker}/earnings/transcripts`) for full transcripts (Layer 2)
-4. Fall back to **web search** (Seeking Alpha, Yahoo Finance, SEC EDGAR) if Chrome CDP also fails (Layer 3)
+4. Fall back to **web search** (Seeking Alpha, Yahoo Finance, SEC EDGAR) only if OpenCLI and Chrome CDP both fail (Layer 4)
 
 **REQUIREMENTS:**
 - ✅ Search for latest earnings - do NOT rely on training data

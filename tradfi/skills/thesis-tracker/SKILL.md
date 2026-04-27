@@ -5,7 +5,24 @@ description: Maintain and update investment theses for portfolio positions and w
 
 # Thesis Tracker
 
-When updating thesis with new data, use alpha-vantage MCP for earnings/transcripts (Layer 1), Yahoo Finance via Chrome CDP for financial data (Layer 2). Follow the three-layer fallback: MCP → Chrome CDP → Web Search.
+## jdy Data Source Fallback Policy
+
+When a skill needs external market/on-chain/macro data, use this order unless the user explicitly says otherwise:
+
+1. **MCP first** — use configured MCP tools when available and healthy.
+2. **OpenCLI second** — if MCP is unavailable, missing keys, rate-limited, or insufficient, use `opencli` before lower-level fallbacks.
+   - If browser access is needed, first launch jdy's fixed browser profile:
+     ```bash
+     /Users/jdy/document/web3/ChromeScript/chrome_multi_instance.sh --instance 0
+     ```
+   - Prefer site adapters when available, e.g. `opencli yahoo-finance`, `opencli xueqiu`, `opencli eastmoney`, `opencli web read`, or `opencli browser ...`.
+   - For public JSON endpoints, `opencli browser open <api-url>` + `opencli browser eval 'document.body.innerText'` is acceptable when it improves consistency with browser/session-based workflows.
+3. **Direct API / Chrome CDP / package fallback third** — use direct HTTP APIs, the bundled `packages/chrome-cdp`, or manual browser extraction only when OpenCLI has no adapter, cannot reach the page, or returns incomplete data.
+4. **Web Search last** — use search only as the final fallback or for qualitative context/news that requires multiple public sources.
+
+Always cite which layer produced each important datapoint. If layers disagree, say so and prefer the more primary/structured source.
+
+When updating thesis with new data, use alpha-vantage MCP for earnings/transcripts (Layer 1), Yahoo Finance via Chrome CDP for financial data (Layer 2). Follow jdy data source fallback: MCP → OpenCLI → Chrome CDP/direct API → Web Search.
 
 ## Workflow
 

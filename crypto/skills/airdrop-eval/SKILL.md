@@ -9,6 +9,23 @@ description: |
 
 # Airdrop Evaluation (v3)
 
+## jdy Data Source Fallback Policy
+
+When a skill needs external market/on-chain/macro data, use this order unless the user explicitly says otherwise:
+
+1. **MCP first** — use configured MCP tools when available and healthy.
+2. **OpenCLI second** — if MCP is unavailable, missing keys, rate-limited, or insufficient, use `opencli` before lower-level fallbacks.
+   - If browser access is needed, first launch jdy's fixed browser profile:
+     ```bash
+     /Users/jdy/document/web3/ChromeScript/chrome_multi_instance.sh --instance 0
+     ```
+   - Prefer site adapters when available, e.g. `opencli yahoo-finance`, `opencli xueqiu`, `opencli eastmoney`, `opencli web read`, or `opencli browser ...`.
+   - For public JSON endpoints, `opencli browser open <api-url>` + `opencli browser eval 'document.body.innerText'` is acceptable when it improves consistency with browser/session-based workflows.
+3. **Direct API / Chrome CDP / package fallback third** — use direct HTTP APIs, the bundled `packages/chrome-cdp`, or manual browser extraction only when OpenCLI has no adapter, cannot reach the page, or returns incomplete data.
+4. **Web Search last** — use search only as the final fallback or for qualitative context/news that requires multiple public sources.
+
+Always cite which layer produced each important datapoint. If layers disagree, say so and prefer the more primary/structured source.
+
 基于门槛+加权评分框架对空投项目进行综合评估，输出 P-xxx 格式报告。
 
 ## Data Source Priority
@@ -17,11 +34,16 @@ description: |
 - **coingecko** — 代币信息（如已发币）
 - **dune** — 链上数据（交易指标、用户增长、手续费、供需分析、KPI 汇总）
 
-### Layer 2: Chrome CDP
+### Layer 2: OpenCLI
+- When MCP is unavailable, use OpenCLI before lower-level fallbacks.
+- Launch browser instance `0` first when browser/session access is needed: `/Users/jdy/document/web3/ChromeScript/chrome_multi_instance.sh --instance 0`.
+- Prefer relevant adapters (`opencli yahoo-finance`, `opencli xueqiu`, `opencli eastmoney`, `opencli web read`, `opencli browser ...`) when available.
+
+### Layer 3: Chrome CDP
 - `defillama.com/protocol/{protocol}` — TVL 趋势、协议数据
 - 官网、文档、Discord
 
-### Layer 3: Web Search
+### Layer 4: Web Search
 - 融资背景、团队信息、社区规模、积分机制、官方公告、竞品信息
 
 ## Workflow

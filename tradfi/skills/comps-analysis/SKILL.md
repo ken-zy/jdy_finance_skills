@@ -21,19 +21,41 @@ description: |
 
 # Comparable Company Analysis
 
+## jdy Data Source Fallback Policy
+
+When a skill needs external market/on-chain/macro data, use this order unless the user explicitly says otherwise:
+
+1. **MCP first** — use configured MCP tools when available and healthy.
+2. **OpenCLI second** — if MCP is unavailable, missing keys, rate-limited, or insufficient, use `opencli` before lower-level fallbacks.
+   - If browser access is needed, first launch jdy's fixed browser profile:
+     ```bash
+     /Users/jdy/document/web3/ChromeScript/chrome_multi_instance.sh --instance 0
+     ```
+   - Prefer site adapters when available, e.g. `opencli yahoo-finance`, `opencli xueqiu`, `opencli eastmoney`, `opencli web read`, or `opencli browser ...`.
+   - For public JSON endpoints, `opencli browser open <api-url>` + `opencli browser eval 'document.body.innerText'` is acceptable when it improves consistency with browser/session-based workflows.
+3. **Direct API / Chrome CDP / package fallback third** — use direct HTTP APIs, the bundled `packages/chrome-cdp`, or manual browser extraction only when OpenCLI has no adapter, cannot reach the page, or returns incomplete data.
+4. **Web Search last** — use search only as the final fallback or for qualitative context/news that requires multiple public sources.
+
+Always cite which layer produced each important datapoint. If layers disagree, say so and prefer the more primary/structured source.
+
 ## Data Source Priority
 
-Follow the three-layer fallback strategy:
+Follow jdy data source fallback strategy:
 
 ### Layer 1: MCP
 - **alpha-vantage** — 技术指标、财报日历（25次/天限额）
 
-### Layer 2: Chrome CDP
+### Layer 2: OpenCLI
+- When MCP is unavailable, use OpenCLI before lower-level fallbacks.
+- Launch browser instance `0` first when browser/session access is needed: `/Users/jdy/document/web3/ChromeScript/chrome_multi_instance.sh --instance 0`.
+- Prefer relevant adapters (`opencli yahoo-finance`, `opencli xueqiu`, `opencli eastmoney`, `opencli web read`, `opencli browser ...`) when available.
+
+### Layer 3: Chrome CDP
 - `finance.yahoo.com/quote/{ticker}` — 股票行情、财报、关键指标
 - `sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK={ticker}` — SEC Filing
 - `tipranks.com/stocks/{ticker}/forecast` — 分析师预期
 
-### Layer 3: Web Search
+### Layer 4: Web Search
 - finance.yahoo.com, macrotrends.net for financial data
 - SEC EDGAR for filings
 
@@ -255,7 +277,7 @@ Same structure as operating section: Max, 75th, Median, 25th, Min for every metr
 - Where did the data come from? (alpha-vantage MCP, Chrome CDP finance.yahoo.com, SEC filings, web search)
 - What period does it cover? (Q4 2024, audited figures)
 - How was it verified? (Cross-checked against 10-K/10-Q)
-- Note: Follow three-layer fallback: alpha-vantage MCP (Layer 1) → Chrome CDP (Layer 2) → Web Search (Layer 3)
+- Note: Follow jdy data source fallback: alpha-vantage MCP (Layer 1) → OpenCLI (Layer 2) → Chrome CDP/direct API (Layer 3) → Web Search (Layer 4)
 
 **Key Definitions:**
 - EBITDA calculation method (Gross Profit + D&A, or Operating Income + D&A)
